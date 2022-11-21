@@ -1,3 +1,7 @@
+/**
+ * @desc Задача выполнена
+ */
+
 const FinishedStatus = () => (
   <div className="task_status_finished">
     Выполнено
