@@ -1,21 +1,18 @@
-import { get, ref, set, getDatabase, onValue, update } from "firebase/database";
-import { storage, database, storRef } from "../firebase-config";
 import { useEffect, useState, useRef } from "react";
 
-import { getDownloadURL, uploadBytes, deleteObject } from "firebase/storage";
-
+import { ref, onValue } from "firebase/database";
+import { storage, database, storRef } from "../firebase-config";
+import { deleteObject } from "firebase/storage";
 import { v4 } from "uuid";
-import dayjs from "dayjs";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 
 import { toast } from "react-toastify";
 
-dayjs.extend(localizedFormat);
-dayjs.extend(isSameOrBefore);
+import isOverdueDate from '../functions/isOverdueDate';
+import updateToDatabase from "../functions/updateToBase";
+import uploadFile from "../functions/uploadFile";
 
-const EditModalTask = ({ isShow, setShow, taskId, prevFiles }) => {
-  // const [expirationDate, setExpirationDate] = useState("");
+
+const EditModalTask = ({ isShow, setShow, taskId }) => {
 
   const [newDate, setNewDate] = useState("");
 
@@ -24,8 +21,6 @@ const EditModalTask = ({ isShow, setShow, taskId, prevFiles }) => {
   const [files, setFiles] = useState([]);
 
   const [selectedFiles, setSelectedFiles] = useState([]);
-
-  const [idDeleteFiles, setIdDeleteFiles] = useState([]);
 
   const titleRef = useRef();
 
@@ -39,52 +34,25 @@ const EditModalTask = ({ isShow, setShow, taskId, prevFiles }) => {
           setNewDescription(description);
           setFiles(files ? files : []);
           setNewDate(expirationDate);
-          // setIdDeleteFiles([]);
         }
       });
     };
     getTask();
-  }, []);
+  }, [taskId]);
 
-  const uploadFile = async (id, file) => {
-    if (file) {
-      const storeFirebase = storRef(storage, `files/${id}`);
-      const res = await uploadBytes(storeFirebase, file);
-      return await getDownloadURL(storeFirebase);
-    }
-    return "";
-  };
-
-  const isOverdue = () => dayjs().isSameOrBefore(dayjs(newDate));
-
-  const isEqual = (arr1, arr2) => {
-    if (arr1.length !== arr2.length) {
-      return false;
-    }
-
-    const sortedArr1 = arr1.sort((a, b) => (a.id > b.id ? 1 : -1));
-    const sortedArr2 = arr2.sort((a, b) => (a.id > b.id ? 1 : -1));
-
-    return JSON.stringify(sortedArr1) === JSON.stringify(sortedArr2);
-  };
-
-  // console.log(files, idDeleteFiles);
 
   const editTask = async (e) => {
     e.preventDefault();
 
     setShow(false);
     let downloadData = [];
-    // !isEqual(prevFiles, files) ||
     if (selectedFiles.length) {
       downloadData = await toast.promise(
         Promise.all(
           selectedFiles.map(async ({ id, name, selectedFile, url }) => {
-            console.log();
             const getName = name ? name : selectedFile.name;
             const getId = `${id}_${getName}`;
             const getUrl = url ? url : await uploadFile(getId, selectedFile);
-            // console.log({ id: getId, name: getName, url: getUrl });
             return { id: getId, name: getName, url: getUrl };
           })
         ),
@@ -96,37 +64,26 @@ const EditModalTask = ({ isShow, setShow, taskId, prevFiles }) => {
       );
     }
 
-    update(ref(database, `/${taskId}`), {
-      title: newTitle,
-      description: newDescription,
-      status: isOverdue() ? "active" : "overdue",
-      expirationDate: newDate,
-      files: downloadData.length ? [...files, ...downloadData] : files,
-    });
+    const status = isOverdueDate(newDate) ? 'active' : 'overdue';
+    const getFiles = downloadData.length ? [...files, ...downloadData] : files;
+    updateToDatabase(taskId, { title: newTitle, description: newDescription, status, expirationDate: newDate, files: getFiles });
   };
 
   const deleteSelectedFile = (id) => (e) => {
     e.preventDefault();
-    console.log(id);
     const newSelectedList = selectedFiles.filter((file) => file.id !== id);
-    console.log(newSelectedList);
     setSelectedFiles(newSelectedList);
-    // setIdDeleteFiles((preveIds) => [...preveIds, id]);
   };
 
   const deleteFile = (id) => (e) => {
     e.preventDefault();
-    // console.log(files, id, taskId);
     const deletedFileRef = storRef(storage, `files/${id}`);
     deleteObject(deletedFileRef);
 
     const newFileList = files.filter((file) => file.id !== id);
     setFiles(newFileList);
-    console.log(newFileList);
 
-    update(ref(database, `/${taskId}`), {
-      files: newFileList,
-    });
+    updateToDatabase(taskId, { files: newFileList });
   };
 
   return (
@@ -206,8 +163,8 @@ const EditModalTask = ({ isShow, setShow, taskId, prevFiles }) => {
                 const selectedFile = e.target.files[0];
                 return [
                   ...prevFiles,
-                  { id: v4(), selectedFile, name: selectedFile.name },
-                ];
+                  { id: v4(), selectedFile, name: selectedFile?.name },
+                ].filter(({ selectedFile }) => selectedFile);;
               })
             }
             name="file"
