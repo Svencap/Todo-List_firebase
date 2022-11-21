@@ -8,6 +8,10 @@ import addToDatabase from "../functions/addToDatabase";
 
 import { toast } from "react-toastify";
 
+
+/**
+ * @desc Форма с добавлением задачи
+ */
 const FormTask = () => {
   const inputRef = useRef();
   const [title, setTitle] = useState("");

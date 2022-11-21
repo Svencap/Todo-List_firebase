@@ -19,8 +19,19 @@ const app = initializeApp(firebaseConfig);
 
 export const db = getFirestore(app);
 
+/**
+ * @constant
+ * Realtime Database
+ * @see {@link https://firebase.google.com/docs/database} Что такое Realtime Database.
+ */
 export const database = getDatabase(app);
 
+
+/**
+ * @constant
+ * Realtime Database
+ * @see {@link https://firebase.google.com/docs/storage} Что такое Облачное хранилище для Firebase
+ */
 export const storage = getStorage(app);
 
 

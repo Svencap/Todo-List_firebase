@@ -12,6 +12,14 @@ import updateToDatabase from "../functions/updateToBase";
 import uploadFile from "../functions/uploadFile";
 
 
+/**
+ * 
+ * @param {object} data
+ * @param {boolean} data.isShow - Состояние открытия модального окна
+ * @param {React.Dispatch<React.SetStateAction<boolean>>} data.setShow - Функция обновляющая состояние открытия модального окна
+ * @param {string} data.taskId - Уникальный идентификатор задачи
+ */
+
 const EditModalTask = ({ isShow, setShow, taskId }) => {
 
   const [newDate, setNewDate] = useState("");
