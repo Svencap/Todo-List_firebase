@@ -22,7 +22,7 @@ export const db = getFirestore(app);
 /**
  * @constant
  * Realtime Database
- * @see {@link https://firebase.google.com/docs/database} Что такое Realtime Database.
+ * @see {@link https://firebase.google.com/docs/database Firebase Realtime Database}
  */
 export const database = getDatabase(app);
 
@@ -30,7 +30,7 @@ export const database = getDatabase(app);
 /**
  * @constant
  * Realtime Database
- * @see {@link https://firebase.google.com/docs/storage} Что такое Облачное хранилище для Firebase
+ * @see {@link https://firebase.google.com/docs/storage Облачное хранилище для Firebase}
  */
 export const storage = getStorage(app);
 
