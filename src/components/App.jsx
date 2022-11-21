@@ -1,11 +1,11 @@
-import logo from "./logo.svg";
-import "./App.css";
-import FromTask from "./components/FromTask";
-import Tasks from "./components/Tasks";
+import "../css/App.css";
+import FromTask from "./FromTask";
+import Tasks from "./Tasks";
+import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
-function App() {
+
+const App = () => {
   return (
     <div className="App">
       <h1 className="title_app">TO DO LIST</h1>

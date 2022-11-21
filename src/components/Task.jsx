@@ -1,24 +1,19 @@
+import { useState, useContext } from "react";
+
 import { database, storage, storRef } from "../firebase-config";
-
 import { ref, remove, update } from "firebase/database";
-
 import { deleteObject } from "firebase/storage";
 
+import DateContext from "../context/DateContext";
+
 import { ActiveStatus, FinishedStatus, OverdueStatus } from "./Statuses/statuses";
-
-
 import EditModalTask from "./EditModalTask";
 
-import { useState } from "react";
-
-import dayjs from "dayjs";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
-dayjs.extend(localizedFormat);
-dayjs.extend(isSameOrBefore);
 
 const Task = ({ id, title, description, status, expirationDate, files }) => {
   const [showModal, setShowModal] = useState(false);
+
+  const dayjs = useContext(DateContext);
 
   const deleteTask = (id, files) => {
     if (files?.length) {
@@ -30,8 +25,7 @@ const Task = ({ id, title, description, status, expirationDate, files }) => {
     remove(ref(database, `/${id}`));
   };
 
-  const closeTask = (id) =>
-    update(ref(database, `/${id}`), { status: "close" });
+  const closeTask = (id) => update(ref(database, `/${id}`), { status: "close" });
 
   // const isOverdue = () => dayjs().isSameOrBefore(dayjs(expirationDate));
   // Возможно написать setInterval
@@ -44,7 +38,7 @@ const Task = ({ id, title, description, status, expirationDate, files }) => {
         {status === "close" ? <FinishedStatus /> : null}
         {status === "overdue" ? <OverdueStatus /> : null}
         <div className="created_task_time">
-          Выполнить до {dayjs(expirationDate).locale("ru").format("ll")}
+          Выполнить до {dayjs(expirationDate).format("ll")}
         </div>
         <div className="task_description">{description}</div>
         {files?.length > 0
@@ -71,7 +65,7 @@ const Task = ({ id, title, description, status, expirationDate, files }) => {
               </div>
             ))
           : null}
-        <button onClick={() => deleteTask(id, files)} className="delete_task">
+        <button type="submit" onClick={() => deleteTask(id, files)} className="delete_task">
           <svg
             width="20"
             height="20"

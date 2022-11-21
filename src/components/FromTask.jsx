@@ -1,20 +1,12 @@
 import { useState, useRef } from "react";
 
-import { storage, database, storRef } from "../firebase-config";
+
 import { v4 } from "uuid";
-
-import { getDownloadURL, uploadBytes } from "firebase/storage";
-
-import { set, ref } from "firebase/database";
-
-import dayjs from "dayjs";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import uploadFile from "../functions/uploadFile";
+import isOverdueDate from "../functions/isOverdueDate";
+import addToDatabase from "../functions/addToDatabase";
 
 import { toast } from "react-toastify";
-
-dayjs.extend(localizedFormat);
-dayjs.extend(isSameOrBefore);
 
 const FormTask = () => {
   const inputRef = useRef();
@@ -26,21 +18,9 @@ const FormTask = () => {
 
   const [expirationDate, setExpirationDate] = useState("");
 
-  const isOverdue = () => dayjs().isSameOrBefore(dayjs(expirationDate));
-
   const handleChangeDescription = (e) => setDescription(e.target.value);
 
   const handleChangeTitle = (e) => setTitle(e.target.value);
-
-  const uploadFile = async (id, file) => {
-    if (file) {
-      // const storeFirebase = storRef(storage, `files/${v4() + file.name}`);
-      const storeFirebase = storRef(storage, `files/${id}`);
-      await uploadBytes(storeFirebase, file);
-      return await getDownloadURL(storeFirebase);
-    }
-    return "";
-  };
 
   const createTask = async (e) => {
     e.preventDefault();
@@ -64,15 +44,16 @@ const FormTask = () => {
       );
     }
     const path = v4();
-    console.log(downloadData);
-    set(ref(database, `/${path}`), {
+    const status = isOverdueDate(expirationDate) ? "active" : "overdue";
+    addToDatabase(path, {
       id: path,
       title,
       description,
-      status: isOverdue() ? "active" : "overdue",
+      status,
       files: downloadData,
       expirationDate,
     });
+
     fileRefInput.current.value = "";
     setTitle("");
     setDescription("");
@@ -106,7 +87,7 @@ const FormTask = () => {
           cols="30"
           rows="10"
           placeholder="Описание задачи"
-        ></textarea>
+        />
         <div className="files">
           {files.map(({ id, selectedFile }) => {
             return (
@@ -125,7 +106,7 @@ const FormTask = () => {
                 const selectedFile = e.target.files[0];
                 return [
                   ...prevFiles,
-                  { id: `${v4()}_${selectedFile.name}`, selectedFile },
+                  { id: `${v4()}_${selectedFile?.name}`, selectedFile },
                 ].filter(({ selectedFile }) => selectedFile);
               })
             }

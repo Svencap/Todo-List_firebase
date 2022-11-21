@@ -1,12 +1,24 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./components/App";
+import "./css/index.css";
+import reportWebVitals from "./reportWebVitals";
+import DateContext from "./context/DateContext";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+
+import dayjs from "dayjs";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+
+dayjs.extend(localizedFormat);
+dayjs.extend(isSameOrBefore);
+
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
+    <DateContext.Provider value={dayjs}>
     <App />
+    </DateContext.Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function
