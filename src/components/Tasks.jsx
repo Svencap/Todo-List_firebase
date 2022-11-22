@@ -20,8 +20,6 @@ const Tasks = () => {
   
   return (
     <div className="tasks_container">
-      <div className="active_tasks">
-        <div>ACTIVE</div>
         {tasks.map(({ id, title, description, status, expirationDate, url, fileName, files }) => (
           <Task
             key={id}
@@ -33,7 +31,6 @@ const Tasks = () => {
             files={files}
           />
         ))}
-      </div>
     </div>
   );
 };

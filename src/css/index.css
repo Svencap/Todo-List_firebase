@@ -11,8 +11,10 @@ body {
   line-height: 150%;
   /* identical to box height, or 21px */
 
+  background: #F2F4F7;
   letter-spacing: -0.02em;
 }
+
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
