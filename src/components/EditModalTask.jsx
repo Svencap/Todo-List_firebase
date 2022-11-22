@@ -5,11 +5,9 @@ import { storage, database, storRef } from "../firebase-config";
 import { deleteObject } from "firebase/storage";
 import { v4 } from "uuid";
 
-import { toast } from "react-toastify";
 
 import isOverdueDate from '../functions/isOverdueDate';
 import updateToDatabase from "../functions/updateToBase";
-import uploadFile from "../functions/uploadFile";
 import downloadFiles from "../functions/downloadFiles";
 
 
