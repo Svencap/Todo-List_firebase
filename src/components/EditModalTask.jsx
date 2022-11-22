@@ -212,7 +212,7 @@ const EditModalTask = ({ isShow, setShow, taskId }) => {
             <label htmlFor="data">Выполнить до</label>
             <input
               onChange={(e) => setNewDate(e.target.value)}
-              type="date"
+              type="datetime-local"
               name=""
               id="data"
               required

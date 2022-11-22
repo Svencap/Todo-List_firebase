@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState, useContext } from "react";
 
 import { database, storage, storRef } from "../firebase-config";
@@ -14,6 +14,8 @@ import {
 } from "./Statuses/statuses";
 import EditModalTask from "./EditModalTask.jsx";
 import '../less/Task.less'
+import isOverdueDate from "../functions/isOverdueDate";
+import updateToDatabase from "../functions/updateToBase";
 
 
 /**
@@ -30,6 +32,7 @@ const Task = ({ id, title, description, status, expirationDate, files }) => {
 
 
   const [showModal, setShowModal] = useState(false);
+  const [currentStatus, setCurrentStatus] = useState('active');
 
   const dayjs = useContext(DateContext);
 
@@ -50,18 +53,32 @@ const Task = ({ id, title, description, status, expirationDate, files }) => {
   const closeTask = (id) =>
     update(ref(database, `/${id}`), { status: "close" });
 
-  // const isOverdue = () => dayjs().isSameOrBefore(dayjs(expirationDate));
-  // Возможно написать setInterval
+
+  useEffect(() => {
+    const setIntervalId = setInterval(() => {
+      console.log(isOverdueDate(expirationDate));
+      if (status === 'close') {
+        return clearInterval(setIntervalId);
+      }
+      else if (!isOverdueDate(expirationDate)) {
+        setCurrentStatus('overdue');
+        updateToDatabase(id, { status: 'overdue'});
+        return clearInterval(setIntervalId);
+      }
+    }, 200, id);
+    return () => clearInterval(setIntervalId);
+  }, [id, currentStatus, status, dayjs, expirationDate]);
 
   return (
     <>
       <div className="task">
         <div className="task_title">{title}</div>
-        {status === "active" ? <ActiveStatus /> : null}
+        {status && currentStatus === "active" ? <ActiveStatus /> : null}
         {status === "close" ? <FinishedStatus /> : null}
-        {status === "overdue" ? <OverdueStatus /> : null}
+        {/* {status === "overdue" ? <OverdueStatus /> : null} */}
+        {status === 'overdue' || currentStatus === "overdue" ? <OverdueStatus /> : null}
         <div className="created_task_time">
-          Выполнить до {dayjs(expirationDate).format("ll")}
+          Выполнить до {dayjs(expirationDate).locale('ru').format("lll")}
         </div>
         <div className="task_description">{description}</div>
         {files?.length > 0
@@ -113,7 +130,7 @@ const Task = ({ id, title, description, status, expirationDate, files }) => {
           </button>
         ) : null}
         <div className="buttons">
-          {status === "active" ? (
+          {status === "active" && currentStatus === 'active' ? (
             <button onClick={() => closeTask(id)} className="finished_task">
               <svg
                 width="16"
