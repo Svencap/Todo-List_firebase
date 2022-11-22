@@ -9,6 +9,7 @@ import DateContext from "./context/DateContext.jsx";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import 'dayjs/locale/ru';
 
 dayjs.extend(localizedFormat);
 dayjs.extend(isSameOrBefore);
