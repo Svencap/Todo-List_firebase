@@ -78,16 +78,9 @@ const EditModalTask = ({ isShow, setShow, taskId }) => {
 
     const deletedFileRef = storRef(storage, `files/${id}`);
     const newFileList = files.filter((file) => file.id !== id);
-    try {
       await deleteObject(deletedFileRef);
       setFiles(newFileList);
       updateToDatabase(taskId, { files: newFileList });
-    } catch (error) {
-      setFiles(newFileList);
-      // Возможно поменять ошибку
-      // Удалить блоки эти
-      throw Error(error.message);
-    }
   };
 
   return (
