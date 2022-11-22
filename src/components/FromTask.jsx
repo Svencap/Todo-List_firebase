@@ -8,6 +8,9 @@ import downloadFiles from "../functions/downloadFiles";
 import '../less/Form.less'
 
 
+/**
+ * @desc Форма с добавлением задачи
+ */
 const FormTask = () => {
   const inputRef = useRef();
   const [title, setTitle] = useState("");

@@ -16,6 +16,16 @@ import EditModalTask from "./EditModalTask.jsx";
 import '../less/Task.less'
 
 
+/**
+ * @desc Добавленная задача
+ * @param {object} obj Данные 
+ * @param {string} obj.id - Уникальный идентификатор задачи
+ * @param {string} obj.title - Заголовок задачи
+ * @param {string} obj.description - Описание задачи
+ * @param {string} obj.status - Статус задачи
+ * @param {string} obj.expirationDate - Дата до которой нужно выполнить задачу
+ * @param {Array} obj.files - Прикрепленные файлы
+ */
 const Task = ({ id, title, description, status, expirationDate, files }) => {
 
 
