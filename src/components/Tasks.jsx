@@ -6,6 +6,9 @@ import { database } from "../firebase-config";
 import { onValue, ref } from "firebase/database";
 
 
+/**
+ * @desc Добавленные задачи
+ */
 const Tasks = () => {
   const [tasks, setTasks] = useState([]);
 

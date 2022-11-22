@@ -15,7 +15,10 @@ import {
 import EditModalTask from "./EditModalTask.jsx";
 import '../less/Task.less'
 
+
 const Task = ({ id, title, description, status, expirationDate, files }) => {
+
+
   const [showModal, setShowModal] = useState(false);
 
   const dayjs = useContext(DateContext);

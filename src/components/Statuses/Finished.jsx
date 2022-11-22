@@ -1,4 +1,8 @@
+
 import React from "react";
+/**
+ * @desc Задача выполнена
+ */
 
 const FinishedStatus = () => (
   <div className="task_status finished">

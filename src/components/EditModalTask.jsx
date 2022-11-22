@@ -11,6 +11,7 @@ import updateToDatabase from "../functions/updateToBase";
 import downloadFiles from "../functions/downloadFiles";
 import "../less/EditTask.less";
 
+
 const EditModalTask = ({ isShow, setShow, taskId }) => {
   const [newDate, setNewDate] = useState("");
 
