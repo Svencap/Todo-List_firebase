@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useState, useRef } from "react";
 
 import { ref, onValue } from "firebase/database";
@@ -8,6 +9,7 @@ import { v4 } from "uuid";
 import isOverdueDate from "../functions/isOverdueDate";
 import updateToDatabase from "../functions/updateToBase";
 import downloadFiles from "../functions/downloadFiles";
+import "../less/EditTask.less";
 
 
 const EditModalTask = ({ isShow, setShow, taskId }) => {
@@ -144,10 +146,23 @@ const EditModalTask = ({ isShow, setShow, taskId }) => {
                 <div key={id} className="file">
                   <span className="text_file">{name}</span>
                   <span
-                    className="detele_file"
+                    className="delete_selected_file"
                     onClick={deleteSelectedFile(id)}
                   >
-                    X
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        clipRule="evenodd"
+                        d="M1.29289 1.29289C1.68342 0.902369 2.31658 0.902369 2.70711 1.29289L8 6.58579L13.2929 1.29289C13.6834 0.902369 14.3166 0.902369 14.7071 1.29289C15.0976 1.68342 15.0976 2.31658 14.7071 2.70711L9.41421 8L14.7071 13.2929C15.0976 13.6834 15.0976 14.3166 14.7071 14.7071C14.3166 15.0976 13.6834 15.0976 13.2929 14.7071L8 9.41421L2.70711 14.7071C2.31658 15.0976 1.68342 15.0976 1.29289 14.7071C0.902369 14.3166 0.902369 13.6834 1.29289 13.2929L6.58579 8L1.29289 2.70711C0.902369 2.31658 0.902369 1.68342 1.29289 1.29289Z"
+                        fill="#060E1F"
+                      />
+                    </svg>
                   </span>
                 </div>
               );

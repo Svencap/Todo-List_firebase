@@ -1,9 +1,11 @@
+
+import React from "react";
 /**
  * @desc Задача выполнена
  */
 
 const FinishedStatus = () => (
-  <div className="task_status_finished">
+  <div className="task_status finished">
     Выполнено
     <svg
       width="12"

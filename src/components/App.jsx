@@ -1,6 +1,8 @@
-import "../css/App.css";
-import FromTask from "./FromTask";
-import Tasks from "./Tasks";
+import React from "react";
+
+import "../less/App.less";
+import FromTask from "./FromTask.jsx";
+import Tasks from "./Tasks.jsx";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from 'react-toastify';
 

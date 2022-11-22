@@ -1,0 +1,81 @@
+@import './colors.less';
+
+.form_task_title {
+  margin-bottom: 20px;
+  height: 30px;
+  border: 1px solid @LIGHT--GREY;
+  border-radius: 5px;
+}
+
+.form_task_description {
+  border: 1px solid @LIGHT--GREY;
+  border-radius: 5px;
+  resize: vertical;
+  min-height: 120px;
+}
+
+.input_files {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.label_file {
+  background: @BLUE--VIOLET;
+  width: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  color: @WHITE;
+  gap: 5px;
+  margin-top: 10px;
+
+  &:hover {
+    cursor: pointer;
+    background: @WHITE--VIOLET;
+  }
+}
+
+.datetime_container {
+  margin-top: 20px;
+
+  & label {
+    margin-right: 10px;
+  }
+}
+
+.form_task_submit {
+  all: unset;
+  all: unset;
+  display: flex;
+  align-items: center;
+  height: 25px;
+  background: @LIGHT--GREEN;
+  border-radius: 6px;
+  color: @MINT--GREEN;
+  padding-left: 3px;
+  justify-content: center;
+  align-content: center;
+  margin-top: 10px;
+
+  &:hover {
+    opacity: 0.8;
+    cursor: pointer;
+    background: #27c25b;
+    color: white;
+  }
+}
+
+.file {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+}
+
+.delete_selected_file:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}

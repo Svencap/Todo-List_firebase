@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./components/App";
-import "./css/index.css";
+import App from "./components/App.jsx";
+import "./less/index.less";
 import reportWebVitals from "./reportWebVitals";
-import DateContext from "./context/DateContext";
+import DateContext from "./context/DateContext.jsx";
 
 
 import dayjs from "dayjs";
