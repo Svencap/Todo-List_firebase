@@ -1,3 +1,7 @@
+/**
+ * @desc Задача просрочена
+ */
+
 const OverdueStatus = () => (
   <div className="task_status_late">
     Просрочено

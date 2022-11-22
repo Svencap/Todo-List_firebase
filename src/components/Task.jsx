@@ -13,7 +13,10 @@ import {
 } from "./Statuses/statuses";
 import EditModalTask from "./EditModalTask";
 
+
 const Task = ({ id, title, description, status, expirationDate, files }) => {
+
+
   const [showModal, setShowModal] = useState(false);
 
   const dayjs = useContext(DateContext);
