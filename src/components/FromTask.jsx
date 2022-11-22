@@ -5,6 +5,7 @@ import { v4 } from "uuid";
 import uploadFile from "../functions/uploadFile";
 import isOverdueDate from "../functions/isOverdueDate";
 import addToDatabase from "../functions/addToDatabase";
+import downloadFiles from "../functions/downloadFiles";
 
 import { toast } from "react-toastify";
 
@@ -30,22 +31,7 @@ const FormTask = () => {
     e.preventDefault();
     let downloadData = [];
     if (files.length) {
-      downloadData = await toast.promise(
-        Promise.all(
-          files.map(async ({ id, selectedFile }) => {
-            return {
-              id,
-              name: selectedFile.name,
-              url: await uploadFile(id, selectedFile),
-            };
-          })
-        ),
-        {
-          pending: "Загружаем файлы",
-          success: "Файлы загружены",
-          error: "Не удалось загрузить файлы",
-        }
-      );
+      downloadData = await (downloadFiles(files));
     }
     const path = v4();
     const status = isOverdueDate(expirationDate) ? "active" : "overdue";

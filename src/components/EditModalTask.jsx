@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import isOverdueDate from '../functions/isOverdueDate';
 import updateToDatabase from "../functions/updateToBase";
 import uploadFile from "../functions/uploadFile";
+import downloadFiles from "../functions/downloadFiles";
 
 
 /**
@@ -55,21 +56,7 @@ const EditModalTask = ({ isShow, setShow, taskId }) => {
     setShow(false);
     let downloadData = [];
     if (selectedFiles.length) {
-      downloadData = await toast.promise(
-        Promise.all(
-          selectedFiles.map(async ({ id, name, selectedFile, url }) => {
-            const getName = name ? name : selectedFile.name;
-            const getId = `${id}_${getName}`;
-            const getUrl = url ? url : await uploadFile(getId, selectedFile);
-            return { id: getId, name: getName, url: getUrl };
-          })
-        ),
-        {
-          pending: "Загружаем файлы",
-          success: "Файлы загружены",
-          error: "Не удалось загрузить файлы",
-        }
-      );
+      downloadData = await downloadFiles(selectedFiles);
     }
 
     const status = isOverdueDate(newDate) ? 'active' : 'overdue';
@@ -83,15 +70,20 @@ const EditModalTask = ({ isShow, setShow, taskId }) => {
     setSelectedFiles(newSelectedList);
   };
 
-  const deleteFile = (id) => (e) => {
+  const deleteFile = (id) => async (e) => {
     e.preventDefault();
+    
     const deletedFileRef = storRef(storage, `files/${id}`);
-    deleteObject(deletedFileRef);
-
     const newFileList = files.filter((file) => file.id !== id);
-    setFiles(newFileList);
-
-    updateToDatabase(taskId, { files: newFileList });
+    try {
+      await deleteObject(deletedFileRef);
+      setFiles(newFileList);
+      updateToDatabase(taskId, { files: newFileList });
+    } catch (error) {
+      setFiles(newFileList);
+      // Возможно поменять ошибку
+      throw Error(error.message);
+    }
   };
 
   return (
