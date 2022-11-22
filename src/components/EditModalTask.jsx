@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import isOverdueDate from '../functions/isOverdueDate';
 import updateToDatabase from "../functions/updateToBase";
 import uploadFile from "../functions/uploadFile";
+import downloadFiles from "../functions/downloadFiles";
 
 
 const EditModalTask = ({ isShow, setShow, taskId }) => {
@@ -47,21 +48,7 @@ const EditModalTask = ({ isShow, setShow, taskId }) => {
     setShow(false);
     let downloadData = [];
     if (selectedFiles.length) {
-      downloadData = await toast.promise(
-        Promise.all(
-          selectedFiles.map(async ({ id, name, selectedFile, url }) => {
-            const getName = name ? name : selectedFile.name;
-            const getId = `${id}_${getName}`;
-            const getUrl = url ? url : await uploadFile(getId, selectedFile);
-            return { id: getId, name: getName, url: getUrl };
-          })
-        ),
-        {
-          pending: "Загружаем файлы",
-          success: "Файлы загружены",
-          error: "Не удалось загрузить файлы",
-        }
-      );
+      downloadData = await downloadFiles(selectedFiles);
     }
 
     const status = isOverdueDate(newDate) ? 'active' : 'overdue';
