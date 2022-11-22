@@ -32,9 +32,13 @@ const Task = ({ id, title, description, status, expirationDate, files }) => {
 
   const deleteTask = (id, files) => {
     if (files?.length) {
-      files.forEach(({ id }) => {
+      files.forEach(async ({ id }) => {
         const deletedFileRef = storRef(storage, `files/${id}`);
-        deleteObject(deletedFileRef);
+        try {
+          await deleteObject(deletedFileRef);
+        } catch (error) {
+          console.log(`files/${id} Файл уже был удален вручную из базы данных`)
+        }
       });
     }
     remove(ref(database, `/${id}`));
