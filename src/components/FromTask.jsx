@@ -1,15 +1,18 @@
+import React from "react";
 import { useState, useRef } from "react";
 
 import { v4 } from "uuid";
 import isOverdueDate from "../functions/isOverdueDate";
 import addToDatabase from "../functions/addToDatabase";
 import downloadFiles from "../functions/downloadFiles";
+import '../less/Form.less'
 
 const FormTask = () => {
   const inputRef = useRef();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [files, setFiles] = useState([]);
+  const [disable, setDisable] = useState(false);
 
   const fileRefInput = useRef();
 
@@ -21,6 +24,7 @@ const FormTask = () => {
 
   const createTask = async (e) => {
     e.preventDefault();
+    setDisable(true);
     let downloadData = [];
     if (files.length) {
       downloadData = await downloadFiles(files);
@@ -41,6 +45,7 @@ const FormTask = () => {
     setDescription("");
     setExpirationDate("");
     setFiles([]);
+    setDisable(false);
   };
 
   const deleteFile = (id) => {
@@ -75,7 +80,7 @@ const FormTask = () => {
             return (
               <div key={id} className="file">
                 <span className="text_file">{selectedFile?.name}</span>
-                <span className="detele_file" onClick={() => deleteFile(id)}>
+                <span className="delete_selected_file" onClick={() => deleteFile(id)}>
                   <svg
                     width="16"
                     height="16"
@@ -139,7 +144,7 @@ const FormTask = () => {
             required
           />
         </div>
-        <button className="form_task_submit" type="submit">
+        <button className="form_task_submit" disabled={disable} type="submit">
           Добавить задачу
         </button>
       </form>

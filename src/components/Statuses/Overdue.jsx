@@ -1,5 +1,7 @@
+import React from "react";
+
 const OverdueStatus = () => (
-  <div className="task_status_late">
+  <div className="task_status late">
     Просрочено
     <svg
       width="12"

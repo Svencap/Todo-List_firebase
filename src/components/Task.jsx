@@ -1,17 +1,19 @@
+import React from "react";
 import { useState, useContext } from "react";
 
 import { database, storage, storRef } from "../firebase-config";
 import { ref, remove, update } from "firebase/database";
 import { deleteObject } from "firebase/storage";
 
-import DateContext from "../context/DateContext";
+import DateContext from "../context/DateContext.jsx";
 
 import {
   ActiveStatus,
   FinishedStatus,
   OverdueStatus,
 } from "./Statuses/statuses";
-import EditModalTask from "./EditModalTask";
+import EditModalTask from "./EditModalTask.jsx";
+import '../less/Task.less'
 
 const Task = ({ id, title, description, status, expirationDate, files }) => {
   const [showModal, setShowModal] = useState(false);
@@ -80,7 +82,7 @@ const Task = ({ id, title, description, status, expirationDate, files }) => {
             ))
           : null}
         {status === "active" ? (
-          <button onClick={() => setShowModal(true)} className="pencil">
+          <button onClick={() => setShowModal(true)} className="edit_task">
             <svg
               width="24"
               height="24"
@@ -99,7 +101,7 @@ const Task = ({ id, title, description, status, expirationDate, files }) => {
         ) : null}
         <div className="buttons">
           {status === "active" ? (
-            <button onClick={() => closeTask(id)} className="finishe_task">
+            <button onClick={() => closeTask(id)} className="finished_task">
               <svg
                 width="16"
                 height="16"
