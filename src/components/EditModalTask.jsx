@@ -62,15 +62,20 @@ const EditModalTask = ({ isShow, setShow, taskId }) => {
     setSelectedFiles(newSelectedList);
   };
 
-  const deleteFile = (id) => (e) => {
+  const deleteFile = (id) => async (e) => {
     e.preventDefault();
+    
     const deletedFileRef = storRef(storage, `files/${id}`);
-    deleteObject(deletedFileRef);
-
     const newFileList = files.filter((file) => file.id !== id);
-    setFiles(newFileList);
-
-    updateToDatabase(taskId, { files: newFileList });
+    try {
+      await deleteObject(deletedFileRef);
+      setFiles(newFileList);
+      updateToDatabase(taskId, { files: newFileList });
+    } catch (error) {
+      setFiles(newFileList);
+      // Возможно поменять ошибку
+      throw Error(error.message);
+    }
   };
 
   return (
