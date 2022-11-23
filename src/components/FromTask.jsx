@@ -141,7 +141,7 @@ const FormTask = () => {
           <label htmlFor="data">Выполнить до</label>
           <input
             onChange={(e) => setExpirationDate(e.target.value)}
-            type="date"
+            type="datetime-local"
             name=""
             id="data"
             value={expirationDate}
