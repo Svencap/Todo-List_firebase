@@ -66,7 +66,7 @@ const Task = ({ id, title, description, status, expirationDate, files }) => {
         updateToDatabase(id, { status: 'overdue'});
         return clearInterval(setIntervalId);
       }
-    }, 200, id);
+    }, 15000, id);
     return () => clearInterval(setIntervalId);
   }, [id, currentStatus, status, dayjs, expirationDate]);
 
@@ -76,7 +76,6 @@ const Task = ({ id, title, description, status, expirationDate, files }) => {
         <div className="task_title">{title}</div>
         {status && currentStatus === "active" ? <ActiveStatus /> : null}
         {status === "close" ? <FinishedStatus /> : null}
-        {/* {status === "overdue" ? <OverdueStatus /> : null} */}
         {status === 'overdue' || currentStatus === "overdue" ? <OverdueStatus /> : null}
         <div className="created_task_time">
           Выполнить до {dayjs(expirationDate).locale('ru').format("lll")}
