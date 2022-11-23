@@ -36,6 +36,11 @@ const Task = ({ id, title, description, status, expirationDate, files }) => {
 
   const dayjs = useContext(DateContext);
 
+  /**
+   * @desc Удаляет задачу из Realtime Database, удаляет файл из Storage
+   * @param {string} id Идентификатор задачи
+   * @param {Array<File>} files Файлы которые нужно удалить из Storage
+   */
   const deleteTask = (id, files) => {
     if (files?.length) {
       files.forEach(async ({ id }) => {
@@ -46,13 +51,13 @@ const Task = ({ id, title, description, status, expirationDate, files }) => {
     remove(ref(database, `/${id}`));
   };
 
-  const closeTask = (id) =>
-    update(ref(database, `/${id}`), { status: "close" });
-
+  const closeTask = (id) => update(ref(database, `/${id}`), { status: "close" });
 
   useEffect(() => {
+    /**
+     * Проверяет каждые 15 секунд не истекла ли дата завершения задачи
+     */
     const setIntervalId = setInterval(() => {
-      console.log(isOverdueDate(expirationDate));
       if (status === 'close') {
         return clearInterval(setIntervalId);
       }
