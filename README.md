@@ -1,1 +1,1 @@
-# Deply [Firebase](https://testovoe-womanup.web.app/)
+# Deploy [Firebase](https://testovoe-womanup.web.app/)
